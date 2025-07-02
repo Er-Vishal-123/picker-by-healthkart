@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,7 @@ import {
   MessageSquare,
   Map,
   LogOut,
-  Settings
+  Settings as SettingsIcon
 } from 'lucide-react';
 import PerformanceDashboard from './supervisor/PerformanceDashboard';
 import PredictiveAlerts from './supervisor/PredictiveAlerts';
@@ -131,7 +132,7 @@ const SupervisorDashboard = ({ user, onLogout }: SupervisorDashboardProps) => {
               className="text-white hover:bg-white hover:bg-opacity-20"
               onClick={() => setActiveTab('settings')}
             >
-              <Settings className="h-5 w-5 mr-2" />
+              <SettingsIcon className="h-5 w-5 mr-2" />
               Settings
             </Button>
             <Button 
@@ -175,7 +176,7 @@ const SupervisorDashboard = ({ user, onLogout }: SupervisorDashboardProps) => {
               Chat
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
-              <Settings className="h-4 w-4" />
+              <SettingsIcon className="h-4 w-4" />
               Settings
             </TabsTrigger>
           </TabsList>
@@ -193,11 +194,11 @@ const SupervisorDashboard = ({ user, onLogout }: SupervisorDashboardProps) => {
           </TabsContent>
 
           <TabsContent value="performance">
-            <PerformanceDashboard />
+            <PerformanceDashboard pickers={pickers} />
           </TabsContent>
 
           <TabsContent value="alerts">
-            <PredictiveAlerts />
+            <PredictiveAlerts pickers={pickers} />
           </TabsContent>
 
           <TabsContent value="heatmap">
@@ -209,7 +210,7 @@ const SupervisorDashboard = ({ user, onLogout }: SupervisorDashboardProps) => {
           </TabsContent>
 
           <TabsContent value="chat">
-            <ChatSystem />
+            <ChatSystem pickers={pickers} />
           </TabsContent>
 
           <TabsContent value="settings">
