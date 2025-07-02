@@ -1,12 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import LoginForm from '@/components/LoginForm';
+import PickerDashboard from '@/components/PickerDashboard';
+import SupervisorDashboard from '@/components/SupervisorDashboard';
 
 const Index = () => {
+  const [user, setUser] = useState<{ id: string; name: string; role: 'picker' | 'supervisor' } | null>(null);
+
+  const handleLogin = (userData: { id: string; name: string; role: 'picker' | 'supervisor' }) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  if (!user) {
+    return <LoginForm onLogin={handleLogin} />;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {user.role === 'picker' ? (
+        <PickerDashboard user={user} onLogout={handleLogout} />
+      ) : (
+        <SupervisorDashboard user={user} onLogout={handleLogout} />
+      )}
     </div>
   );
 };
