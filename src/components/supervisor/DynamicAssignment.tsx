@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,12 +7,17 @@ import { RefreshCw, Users, Package, Clock, ArrowRight, Shuffle } from 'lucide-re
 interface PickerStatus {
   id: string;
   name: string;
-  status: 'active' | 'idle' | 'offline';
   currentPicklist: string | null;
   totalAssigned: number;
   completed: number;
   inProgress: number;
+  exceptions: number;
   efficiency: number;
+  lastActivity: string;
+  status: 'active' | 'idle' | 'offline';
+  pickAccuracy: number;
+  timePerItem: number;
+  ordersPerHour: number;
 }
 
 interface DynamicAssignmentProps {
