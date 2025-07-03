@@ -9,7 +9,352 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_broadcast: boolean
+          message_text: string
+          message_type: string
+          recipient_id: string | null
+          sender_id: string
+          warehouse_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_broadcast?: boolean
+          message_text: string
+          message_type?: string
+          recipient_id?: string | null
+          sender_id: string
+          warehouse_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_broadcast?: boolean
+          message_text?: string
+          message_type?: string
+          recipient_id?: string | null
+          sender_id?: string
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          location: string
+          product_name: string
+          quantity: number
+          reserved_quantity: number
+          sku: string
+          unit_price: number | null
+          updated_at: string | null
+          warehouse_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          location: string
+          product_name: string
+          quantity?: number
+          reserved_quantity?: number
+          sku: string
+          unit_price?: number | null
+          updated_at?: string | null
+          warehouse_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          location?: string
+          product_name?: string
+          quantity?: number
+          reserved_quantity?: number
+          sku?: string
+          unit_price?: number | null
+          updated_at?: string | null
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_metrics: {
+        Row: {
+          average_pick_time: unknown | null
+          created_at: string | null
+          date: string
+          efficiency_score: number | null
+          exceptions: number
+          id: string
+          picker_id: string
+          successful_picks: number
+          total_picks: number
+          warehouse_id: string
+        }
+        Insert: {
+          average_pick_time?: unknown | null
+          created_at?: string | null
+          date: string
+          efficiency_score?: number | null
+          exceptions?: number
+          id?: string
+          picker_id: string
+          successful_picks?: number
+          total_picks?: number
+          warehouse_id: string
+        }
+        Update: {
+          average_pick_time?: unknown | null
+          created_at?: string | null
+          date?: string
+          efficiency_score?: number | null
+          exceptions?: number
+          id?: string
+          picker_id?: string
+          successful_picks?: number
+          total_picks?: number
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_metrics_picker_id_fkey"
+            columns: ["picker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "performance_metrics_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pick_list_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          inventory_id: string
+          pick_list_id: string
+          picked_at: string | null
+          picker_notes: string | null
+          quantity_picked: number
+          quantity_requested: number
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inventory_id: string
+          pick_list_id: string
+          picked_at?: string | null
+          picker_notes?: string | null
+          quantity_picked?: number
+          quantity_requested: number
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inventory_id?: string
+          pick_list_id?: string
+          picked_at?: string | null
+          picker_notes?: string | null
+          quantity_picked?: number
+          quantity_requested?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pick_list_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pick_list_items_pick_list_id_fkey"
+            columns: ["pick_list_id"]
+            isOneToOne: false
+            referencedRelation: "pick_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pick_lists: {
+        Row: {
+          assigned_picker_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          list_number: string
+          picked_items: number
+          priority: string
+          status: string
+          total_items: number
+          updated_at: string | null
+          warehouse_id: string
+        }
+        Insert: {
+          assigned_picker_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          list_number: string
+          picked_items?: number
+          priority?: string
+          status?: string
+          total_items?: number
+          updated_at?: string | null
+          warehouse_id: string
+        }
+        Update: {
+          assigned_picker_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          list_number?: string
+          picked_items?: number
+          priority?: string
+          status?: string
+          total_items?: number
+          updated_at?: string | null
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pick_lists_assigned_picker_id_fkey"
+            columns: ["assigned_picker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pick_lists_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          employee_id: string
+          full_name: string
+          id: string
+          role: string
+          updated_at: string | null
+          warehouse_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          employee_id: string
+          full_name: string
+          id: string
+          role: string
+          updated_at?: string | null
+          warehouse_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          employee_id?: string
+          full_name?: string
+          id?: string
+          role?: string
+          updated_at?: string | null
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_profiles_warehouse"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      warehouses: {
+        Row: {
+          created_at: string | null
+          id: string
+          location: string
+          manager_id: string | null
+          name: string
+          updated_at: string | null
+          wms_config: Json | null
+          wms_integration_type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          location: string
+          manager_id?: string | null
+          name: string
+          updated_at?: string | null
+          wms_config?: Json | null
+          wms_integration_type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          location?: string
+          manager_id?: string | null
+          name?: string
+          updated_at?: string | null
+          wms_config?: Json | null
+          wms_integration_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warehouses_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

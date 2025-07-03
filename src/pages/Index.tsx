@@ -1,30 +1,36 @@
 
-import { useState } from 'react';
-import LoginForm from '@/components/LoginForm';
+import { useAuth } from '@/hooks/useAuth';
+import AuthForm from '@/components/AuthForm';
 import PickerDashboard from '@/components/PickerDashboard';
 import SupervisorDashboard from '@/components/SupervisorDashboard';
 
 const Index = () => {
-  const [user, setUser] = useState<{ id: string; name: string; role: 'picker' | 'supervisor' } | null>(null);
+  const { user, profile, loading } = useAuth();
 
-  const handleLogin = (userData: { id: string; name: string; role: 'picker' | 'supervisor' }) => {
-    setUser(userData);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-  };
-
-  if (!user) {
-    return <LoginForm onLogin={handleLogin} />;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
   }
+
+  if (!user || !profile) {
+    return <AuthForm />;
+  }
+
+  const userWithRole = {
+    id: profile.id,
+    name: profile.full_name,
+    role: profile.role
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {user.role === 'picker' ? (
-        <PickerDashboard user={user} onLogout={handleLogout} />
+      {profile.role === 'picker' ? (
+        <PickerDashboard user={userWithRole} onLogout={() => {}} />
       ) : (
-        <SupervisorDashboard user={user} onLogout={handleLogout} />
+        <SupervisorDashboard user={userWithRole} onLogout={() => {}} />
       )}
     </div>
   );
