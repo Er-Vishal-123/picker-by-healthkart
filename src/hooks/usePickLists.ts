@@ -28,7 +28,10 @@ export const usePickLists = () => {
         .eq('warehouse_id', profile.warehouse_id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching pick lists:', error);
+        throw error;
+      }
       return data || [];
     },
     enabled: !!profile?.warehouse_id,
@@ -38,7 +41,40 @@ export const usePickLists = () => {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const { error } = await supabase
         .from('pick_lists')
-        .update({ status })
+        .update({ 
+          status,
+          updated_at: new Date().toISOString(),
+          ...(status === 'completed' ? { completed_at: new Date().toISOString() } : {})
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pickLists'] });
+    },
+  });
+
+  const updatePickListItem = useMutation({
+    mutationFn: async ({ 
+      id, 
+      quantity_picked, 
+      status, 
+      picker_notes 
+    }: { 
+      id: string; 
+      quantity_picked: number; 
+      status: string; 
+      picker_notes?: string; 
+    }) => {
+      const { error } = await supabase
+        .from('pick_list_items')
+        .update({ 
+          quantity_picked,
+          status,
+          picker_notes,
+          picked_at: new Date().toISOString()
+        })
         .eq('id', id);
 
       if (error) throw error;
@@ -52,5 +88,6 @@ export const usePickLists = () => {
     pickLists: pickLists || [],
     isLoading,
     updatePickListStatus: updatePickListStatus.mutate,
+    updatePickListItem: updatePickListItem.mutate,
   };
 };
