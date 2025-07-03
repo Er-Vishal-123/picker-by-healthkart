@@ -102,6 +102,6 @@ export const useChat = () => {
     messages: messages || [],
     isLoading,
     sendMessage: sendMessage.mutate,
-    isLoading: sendMessage.isPending,
+    isSending: sendMessage.isPending,
   };
 };
