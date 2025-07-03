@@ -106,7 +106,8 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
         codeReaderRef.current = new BrowserMultiFormatReader();
       }
 
-      const videoInputDevices = await codeReaderRef.current.listVideoInputDevices();
+      // Use static method to get video input devices
+      const videoInputDevices = await BrowserMultiFormatReader.listVideoInputDevices();
       
       if (videoInputDevices.length === 0) {
         toast({
@@ -155,7 +156,12 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
 
   const stopBarcodeScanning = () => {
     if (codeReaderRef.current) {
-      codeReaderRef.current.reset();
+      // Use stopContinuousDecode instead of reset
+      try {
+        codeReaderRef.current.stopContinuousDecode();
+      } catch (error) {
+        console.log('Error stopping barcode scanner:', error);
+      }
     }
     setIsScanning(false);
   };
