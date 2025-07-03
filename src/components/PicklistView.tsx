@@ -156,9 +156,9 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
 
   const stopBarcodeScanning = () => {
     if (codeReaderRef.current) {
-      // Use stopContinuousDecode instead of reset
+      // Use reset method which is available on BrowserMultiFormatReader
       try {
-        codeReaderRef.current.stopContinuousDecode();
+        codeReaderRef.current.reset();
       } catch (error) {
         console.log('Error stopping barcode scanner:', error);
       }
