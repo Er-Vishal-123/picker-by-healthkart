@@ -156,9 +156,16 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
 
   const stopBarcodeScanning = () => {
     if (codeReaderRef.current) {
-      // Use reset method which is available on BrowserMultiFormatReader
       try {
-        codeReaderRef.current.reset();
+        // Stop all video tracks manually
+        if (videoRef.current && videoRef.current.srcObject) {
+          const stream = videoRef.current.srcObject as MediaStream;
+          stream.getTracks().forEach(track => track.stop());
+          videoRef.current.srcObject = null;
+        }
+        
+        // Create a new instance for next scan
+        codeReaderRef.current = null;
       } catch (error) {
         console.log('Error stopping barcode scanner:', error);
       }
