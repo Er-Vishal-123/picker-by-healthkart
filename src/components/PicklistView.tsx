@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,9 +12,12 @@ import {
   XCircle, 
   Search,
   AlertTriangle,
-  RotateCcw
+  RotateCcw,
+  Camera,
+  CameraOff
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 
 interface PicklistItem {
   id: string;
@@ -51,6 +53,9 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
   const [scanInput, setScanInput] = useState('');
   const [showAlternates, setShowAlternates] = useState(false);
   const [queuedActions, setQueuedActions] = useState<any[]>([]);
+  const [isScanning, setIsScanning] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const codeReaderRef = useRef<BrowserMultiFormatReader | null>(null);
 
   useEffect(() => {
     // Mock picklist items
@@ -85,7 +90,6 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
         alternateLocations: ['A3-B3-S2', 'A4-B1-S1'],
         status: 'pending'
       },
-      // ... more items
     ];
     setItems(mockItems);
   }, []);
@@ -94,10 +98,73 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
   const completedItems = items.filter(item => item.status === 'picked').length;
   const progress = (completedItems / items.length) * 100;
 
-  const handleScan = () => {
-    if (!scanInput.trim()) return;
+  const startBarcodeScanning = async () => {
+    try {
+      setIsScanning(true);
+      
+      if (!codeReaderRef.current) {
+        codeReaderRef.current = new BrowserMultiFormatReader();
+      }
+
+      const videoInputDevices = await codeReaderRef.current.listVideoInputDevices();
+      
+      if (videoInputDevices.length === 0) {
+        toast({
+          title: "No Camera Found",
+          description: "Please ensure your device has a camera.",
+          variant: "destructive"
+        });
+        setIsScanning(false);
+        return;
+      }
+
+      const firstDeviceId = videoInputDevices[0].deviceId;
+
+      codeReaderRef.current.decodeFromVideoDevice(
+        firstDeviceId,
+        videoRef.current!,
+        (result, error) => {
+          if (result) {
+            const scannedCode = result.getText();
+            console.log('Scanned barcode:', scannedCode);
+            setScanInput(scannedCode);
+            handleScan(scannedCode);
+            stopBarcodeScanning();
+          }
+          if (error && !(error.name === 'NotFoundException')) {
+            console.error('Barcode scanning error:', error);
+          }
+        }
+      );
+
+      toast({
+        title: "Camera Started",
+        description: "Point your camera at a barcode to scan.",
+      });
+
+    } catch (error) {
+      console.error('Failed to start barcode scanning:', error);
+      toast({
+        title: "Camera Error",
+        description: "Failed to access camera. Please check permissions.",
+        variant: "destructive"
+      });
+      setIsScanning(false);
+    }
+  };
+
+  const stopBarcodeScanning = () => {
+    if (codeReaderRef.current) {
+      codeReaderRef.current.reset();
+    }
+    setIsScanning(false);
+  };
+
+  const handleScan = (scannedCode?: string) => {
+    const codeToCheck = scannedCode || scanInput.trim();
+    if (!codeToCheck) return;
     
-    const scannedSku = scanInput.trim().toUpperCase();
+    const scannedSku = codeToCheck.toUpperCase();
     const expectedSku = currentItem?.sku.toUpperCase();
     
     if (scannedSku === expectedSku) {
@@ -348,6 +415,21 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
               </CardHeader>
               
               <CardContent className="space-y-4">
+                {/* Camera Scanner */}
+                {isScanning && (
+                  <div className="relative">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-48 bg-black rounded-lg"
+                      autoPlay
+                      playsInline
+                    />
+                    <div className="absolute inset-0 border-2 border-blue-500 rounded-lg pointer-events-none">
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-red-500 rounded-lg"></div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex gap-2">
                   <Input
                     value={scanInput}
@@ -357,10 +439,33 @@ const PicklistView = ({ picklist, onBack, onComplete, isOnline }: PicklistViewPr
                     onKeyPress={(e) => e.key === 'Enter' && handleScan()}
                   />
                   <Button
-                    onClick={handleScan}
+                    onClick={() => handleScan()}
                     className="h-12 px-6 bg-blue-500 hover:bg-blue-600"
                   >
                     <Scan className="h-5 w-5" />
+                  </Button>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={isScanning ? stopBarcodeScanning : startBarcodeScanning}
+                    className={`flex-1 h-12 ${
+                      isScanning 
+                        ? 'bg-red-500 hover:bg-red-600' 
+                        : 'bg-purple-500 hover:bg-purple-600'
+                    } text-white`}
+                  >
+                    {isScanning ? (
+                      <>
+                        <CameraOff className="h-5 w-5 mr-2" />
+                        Stop Scanner
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="h-5 w-5 mr-2" />
+                        Start Scanner
+                      </>
+                    )}
                   </Button>
                 </div>
                 

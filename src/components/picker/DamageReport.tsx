@@ -1,8 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Camera, Upload, AlertTriangle, Package } from 'lucide-react';
+import { ArrowLeft, Camera, Upload, AlertTriangle, Package, X, Eye } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 interface User {
   id: string;
@@ -22,7 +23,7 @@ interface DamageReport {
   itemName: string;
   damageType: string;
   description: string;
-  photos: string[];
+  photos: { url: string; name: string; blob?: Blob }[];
   timestamp: string;
   status: 'pending' | 'reviewed' | 'resolved';
 }
@@ -33,7 +34,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
     itemName: '',
     damageType: '',
     description: '',
-    photos: [] as string[]
+    photos: [] as { url: string; name: string; blob?: Blob }[]
   });
 
   const [reports, setReports] = useState<DamageReport[]>([
@@ -43,7 +44,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
       itemName: 'HealthKart Whey Protein 1kg',
       damageType: 'packaging',
       description: 'Container has visible cracks on the side',
-      photos: ['photo1.jpg'],
+      photos: [{ url: '', name: 'photo1.jpg' }],
       timestamp: '10 min ago',
       status: 'pending'
     },
@@ -53,11 +54,18 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
       itemName: 'Multivitamin Tablets',
       damageType: 'expiry',
       description: 'Product expired 2 months ago',
-      photos: ['photo2.jpg', 'photo3.jpg'],
+      photos: [{ url: '', name: 'photo2.jpg' }, { url: '', name: 'photo3.jpg' }],
       timestamp: '1 hour ago',
       status: 'reviewed'
     }
   ]);
+
+  const [showCamera, setShowCamera] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; name: string } | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const damageTypes = [
     { id: 'packaging', label: 'Packaging Damage', icon: '📦' },
@@ -68,13 +76,145 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
     { id: 'other', label: 'Other Issue', icon: '❓' }
   ];
 
-  const handlePhotoCapture = () => {
-    // Simulate photo capture
-    const newPhoto = `photo_${Date.now()}.jpg`;
-    setCurrentReport({
-      ...currentReport,
-      photos: [...currentReport.photos, newPhoto]
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: 'environment', // Use back camera if available
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        } 
+      });
+      
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+      setShowCamera(true);
+      
+      toast({
+        title: "Camera Started 📸",
+        description: "Position the item and tap to capture photo.",
+      });
+    } catch (error) {
+      console.error('Failed to start camera:', error);
+      toast({
+        title: "Camera Error",
+        description: "Failed to access camera. Please check permissions or try uploading a file instead.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setShowCamera(false);
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+      
+      if (context) {
+        // Set canvas dimensions to match video
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Draw the video frame to canvas
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Convert canvas to blob
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `damage_photo_${timestamp}.jpg`;
+            
+            const newPhoto = {
+              url,
+              name: filename,
+              blob
+            };
+            
+            setCurrentReport(prev => ({
+              ...prev,
+              photos: [...prev.photos, newPhoto]
+            }));
+            
+            toast({
+              title: "Photo Captured! 📸",
+              description: `Photo saved as ${filename}`,
+            });
+            
+            stopCamera();
+          }
+        }, 'image/jpeg', 0.8);
+      }
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const url = URL.createObjectURL(file);
+          const newPhoto = {
+            url,
+            name: file.name,
+            blob: file
+          };
+          
+          setCurrentReport(prev => ({
+            ...prev,
+            photos: [...prev.photos, newPhoto]
+          }));
+          
+          toast({
+            title: "Photo Uploaded! 📁",
+            description: `${file.name} has been added to the report.`,
+          });
+        } else {
+          toast({
+            title: "Invalid File Type",
+            description: "Please upload only image files (JPG, PNG, etc.)",
+            variant: "destructive"
+          });
+        }
+      });
+    }
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    const photo = currentReport.photos[index];
+    if (photo.url) {
+      URL.revokeObjectURL(photo.url);
+    }
+    
+    setCurrentReport(prev => ({
+      ...prev,
+      photos: prev.photos.filter((_, i) => i !== index)
+    }));
+    
+    toast({
+      title: "Photo Removed",
+      description: `${photo.name} has been removed from the report.`,
     });
+  };
+
+  const viewPhoto = (photo: { url: string; name: string }) => {
+    setSelectedPhoto(photo);
   };
 
   const handleSubmitReport = () => {
@@ -86,12 +226,31 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
         status: 'pending'
       };
       setReports([newReport, ...reports]);
+      
+      // Reset form
+      currentReport.photos.forEach(photo => {
+        if (photo.url) {
+          URL.revokeObjectURL(photo.url);
+        }
+      });
+      
       setCurrentReport({
         sku: '',
         itemName: '',
         damageType: '',
         description: '',
         photos: []
+      });
+      
+      toast({
+        title: "Report Submitted Successfully! ✅",
+        description: `Damage report ${newReport.id} has been created and will be reviewed by the supervisor.`,
+      });
+    } else {
+      toast({
+        title: "Incomplete Report",
+        description: "Please fill in all required fields before submitting.",
+        variant: "destructive"
       });
     }
   };
@@ -150,7 +309,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
               {/* Item Information */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">SKU</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">SKU *</label>
                   <input
                     type="text"
                     value={currentReport.sku}
@@ -161,7 +320,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Item Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Item Name *</label>
                   <input
                     type="text"
                     value={currentReport.itemName}
@@ -174,7 +333,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
 
               {/* Damage Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Damage Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Damage Type *</label>
                 <div className="grid grid-cols-2 gap-2">
                   {damageTypes.map((type) => (
                     <Button
@@ -192,7 +351,7 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
                 <textarea
                   value={currentReport.description}
                   onChange={(e) => setCurrentReport({...currentReport, description: e.target.value})}
@@ -202,25 +361,106 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
                 />
               </div>
 
-              {/* Photo Capture */}
+              {/* Photo Capture Section */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Photos</label>
+                
+                {/* Camera View */}
+                {showCamera && (
+                  <div className="mb-4">
+                    <div className="relative bg-black rounded-lg overflow-hidden">
+                      <video
+                        ref={videoRef}
+                        className="w-full h-64 object-cover"
+                        autoPlay
+                        playsInline
+                        muted
+                      />
+                      <div className="absolute inset-0 border-2 border-white/30 rounded-lg pointer-events-none">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-red-500 rounded-lg"></div>
+                      </div>
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                        <Button
+                          onClick={capturePhoto}
+                          className="bg-white text-black hover:bg-gray-100 rounded-full w-16 h-16"
+                        >
+                          <Camera className="h-6 w-6" />
+                        </Button>
+                        <Button
+                          onClick={stopCamera}
+                          variant="destructive"
+                          className="rounded-full w-16 h-16"
+                        >
+                          <X className="h-6 w-6" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Photo Controls */}
                 <div className="space-y-3">
-                  <Button
-                    onClick={handlePhotoCapture}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white h-12"
-                  >
-                    <Camera className="h-5 w-5 mr-2" />
-                    Capture Photo
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={startCamera}
+                      disabled={showCamera}
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white h-12"
+                    >
+                      <Camera className="h-5 w-5 mr-2" />
+                      {showCamera ? 'Camera Active' : 'Open Camera'}
+                    </Button>
+                    
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      variant="outline"
+                      className="flex-1 h-12"
+                    >
+                      <Upload className="h-5 w-5 mr-2" />
+                      Upload File
+                    </Button>
+                  </div>
                   
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  
+                  {/* Photo Preview Grid */}
                   {currentReport.photos.length > 0 && (
                     <div className="bg-gray-100 p-3 rounded-lg">
                       <p className="text-sm font-medium text-gray-700 mb-2">Captured Photos:</p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {currentReport.photos.map((photo, index) => (
-                          <div key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                            📷 {photo}
+                          <div key={index} className="relative group">
+                            <img
+                              src={photo.url}
+                              alt={photo.name}
+                              className="w-full h-20 object-cover rounded border cursor-pointer"
+                              onClick={() => viewPhoto(photo)}
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center gap-1">
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => viewPhoto(photo)}
+                                className="h-6 w-6 p-0"
+                              >
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => removePhoto(index)}
+                                className="h-6 w-6 p-0"
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1 truncate">{photo.name}</p>
                           </div>
                         ))}
                       </div>
@@ -322,6 +562,34 @@ const DamageReport = ({ onBack, user, isOnline }: DamageReportProps) => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Hidden canvas for photo capture */}
+      <canvas ref={canvasRef} className="hidden" />
+
+      {/* Photo Viewer Modal */}
+      {selectedPhoto && (
+        <div 
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <div className="relative max-w-4xl max-h-full">
+            <img
+              src={selectedPhoto.url}
+              alt={selectedPhoto.name}
+              className="max-w-full max-h-full object-contain rounded"
+            />
+            <Button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 p-0"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+            <p className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded">
+              {selectedPhoto.name}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
