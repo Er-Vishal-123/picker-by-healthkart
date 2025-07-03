@@ -70,7 +70,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           variant: "destructive"
         });
       } else {
-        setProfile(data);
+        // Type assertion to ensure role is properly typed
+        const profileData: Profile = {
+          ...data,
+          role: data.role as 'picker' | 'supervisor' | 'admin'
+        };
+        setProfile(profileData);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);

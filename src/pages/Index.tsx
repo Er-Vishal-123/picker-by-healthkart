@@ -19,10 +19,13 @@ const Index = () => {
     return <AuthForm />;
   }
 
+  // Handle admin role by treating it as supervisor for dashboard purposes
+  const userRole = profile.role === 'admin' ? 'supervisor' : profile.role;
+  
   const userWithRole = {
     id: profile.id,
     name: profile.full_name,
-    role: profile.role
+    role: userRole as 'picker' | 'supervisor'
   };
 
   return (
