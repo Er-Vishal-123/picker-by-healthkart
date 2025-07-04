@@ -9,6 +9,91 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          description: string
+          id: string
+          metadata: Json | null
+          user_id: string
+          warehouse_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          description: string
+          id?: string
+          metadata?: Json | null
+          user_id: string
+          warehouse_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_log_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      category_performance: {
+        Row: {
+          average_time_minutes: number | null
+          category: string
+          created_at: string | null
+          date: string
+          failed_picks: number | null
+          id: string
+          successful_picks: number | null
+          total_picks: number | null
+          updated_at: string | null
+          warehouse_id: string
+        }
+        Insert: {
+          average_time_minutes?: number | null
+          category: string
+          created_at?: string | null
+          date?: string
+          failed_picks?: number | null
+          id?: string
+          successful_picks?: number | null
+          total_picks?: number | null
+          updated_at?: string | null
+          warehouse_id: string
+        }
+        Update: {
+          average_time_minutes?: number | null
+          category?: string
+          created_at?: string | null
+          date?: string
+          failed_picks?: number | null
+          id?: string
+          successful_picks?: number | null
+          total_picks?: number | null
+          updated_at?: string | null
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "category_performance_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           created_at: string | null
@@ -307,6 +392,62 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "fk_profiles_warehouse"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_assignments: {
+        Row: {
+          assigned_at: string | null
+          created_at: string | null
+          due_date: string | null
+          id: string
+          notes: string | null
+          picker_id: string
+          priority: string
+          status: string
+          supervisor_id: string
+          task_id: string | null
+          task_type: string
+          updated_at: string | null
+          warehouse_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          picker_id: string
+          priority?: string
+          status?: string
+          supervisor_id: string
+          task_id?: string | null
+          task_type?: string
+          updated_at?: string | null
+          warehouse_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          picker_id?: string
+          priority?: string
+          status?: string
+          supervisor_id?: string
+          task_id?: string | null
+          task_type?: string
+          updated_at?: string | null
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_assignments_warehouse_id_fkey"
             columns: ["warehouse_id"]
             isOneToOne: false
             referencedRelation: "warehouses"
