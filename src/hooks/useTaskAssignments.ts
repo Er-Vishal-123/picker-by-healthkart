@@ -21,6 +21,16 @@ export interface TaskAssignment {
   updated_at: string;
 }
 
+export interface TaskAssignmentInput {
+  picker_id: string;
+  task_type: string;
+  priority: string;
+  due_date?: string | null;
+  notes?: string | null;
+  status: string;
+  task_id?: string | null;
+}
+
 export const useTaskAssignments = () => {
   const { profile } = useAuth();
   const queryClient = useQueryClient();
@@ -69,14 +79,26 @@ export const useTaskAssignments = () => {
   });
 
   const createTaskAssignment = useMutation({
-    mutationFn: async (task: Partial<TaskAssignment>) => {
+    mutationFn: async (task: TaskAssignmentInput) => {
+      if (!profile?.id || !profile?.warehouse_id) {
+        throw new Error('User profile not available');
+      }
+
+      const taskData = {
+        picker_id: task.picker_id,
+        task_type: task.task_type,
+        priority: task.priority,
+        due_date: task.due_date,
+        notes: task.notes,
+        status: task.status,
+        task_id: task.task_id,
+        supervisor_id: profile.id,
+        warehouse_id: profile.warehouse_id,
+      };
+
       const { data, error } = await supabase
         .from('task_assignments')
-        .insert({
-          ...task,
-          supervisor_id: profile?.id,
-          warehouse_id: profile?.warehouse_id,
-        })
+        .insert(taskData)
         .select()
         .single();
 
