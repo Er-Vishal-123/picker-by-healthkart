@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import AuthForm from '@/components/AuthForm';
 import PickerDashboard from '@/components/PickerDashboard';
 import SupervisorDashboard from '@/components/SupervisorDashboard';
+import AdminDashboard from '@/components/AdminDashboard';
 
 const Index = () => {
   const { user, profile, loading, signOut } = useAuth();
@@ -38,19 +39,18 @@ const Index = () => {
     return <AuthForm />;
   }
 
-  // Handle admin role by treating it as supervisor for dashboard purposes
-  const userRole = profile.role === 'admin' ? 'supervisor' : profile.role;
-  
   const userWithRole = {
     id: profile.id,
     name: profile.full_name,
-    role: userRole as 'picker' | 'supervisor'
+    role: profile.role as 'picker' | 'supervisor' | 'admin'
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {profile.role === 'picker' ? (
         <PickerDashboard user={userWithRole} onLogout={handleLogout} />
+      ) : profile.role === 'admin' ? (
+        <AdminDashboard user={userWithRole} onLogout={handleLogout} />
       ) : (
         <SupervisorDashboard user={userWithRole} onLogout={handleLogout} />
       )}
