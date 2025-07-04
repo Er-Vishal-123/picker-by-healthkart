@@ -1,15 +1,26 @@
 
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import AuthForm from '@/components/AuthForm';
 import PickerDashboard from '@/components/PickerDashboard';
 import SupervisorDashboard from '@/components/SupervisorDashboard';
 
 const Index = () => {
   const { user, profile, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If not authenticated, redirect to landing page
+    if (!loading && !user) {
+      navigate('/');
+    }
+  }, [user, loading, navigate]);
 
   const handleLogout = async () => {
     try {
       await signOut();
+      navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
     }
