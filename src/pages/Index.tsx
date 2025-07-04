@@ -39,21 +39,42 @@ const Index = () => {
     return <AuthForm />;
   }
 
-  const userWithRole = {
+  // Create properly typed user objects for each dashboard
+  if (profile.role === 'picker') {
+    const pickerUser = {
+      id: profile.id,
+      name: profile.full_name,
+      role: profile.role as 'picker'
+    };
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <PickerDashboard user={pickerUser} onLogout={handleLogout} />
+      </div>
+    );
+  }
+
+  if (profile.role === 'admin') {
+    const adminUser = {
+      id: profile.id,
+      name: profile.full_name,
+      role: profile.role as 'admin'
+    };
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <AdminDashboard user={adminUser} onLogout={handleLogout} />
+      </div>
+    );
+  }
+
+  // Default to supervisor (includes 'supervisor' role)
+  const supervisorUser = {
     id: profile.id,
     name: profile.full_name,
-    role: profile.role as 'picker' | 'supervisor' | 'admin'
+    role: profile.role as 'supervisor'
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {profile.role === 'picker' ? (
-        <PickerDashboard user={userWithRole} onLogout={handleLogout} />
-      ) : profile.role === 'admin' ? (
-        <AdminDashboard user={userWithRole} onLogout={handleLogout} />
-      ) : (
-        <SupervisorDashboard user={userWithRole} onLogout={handleLogout} />
-      )}
+      <SupervisorDashboard user={supervisorUser} onLogout={handleLogout} />
     </div>
   );
 };
