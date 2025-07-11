@@ -86,7 +86,7 @@ const Landing = () => {
             </h1>
           </div>
           <Button 
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/dashboard')}
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
           >
             Get Started
@@ -113,10 +113,10 @@ const Landing = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Button 
               size="lg"
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/dashboard')}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
             >
-              Start Free Trial
+              Try Demo
             </Button>
             <Button 
               size="lg"
@@ -214,7 +214,7 @@ const Landing = () => {
                 <p className="text-gray-600 mb-6">Join hundreds of warehouses already using our platform</p>
                 <Button 
                   size="lg"
-                  onClick={() => navigate('/auth')}
+                  onClick={() => navigate('/dashboard')}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 >
                   Start Your Journey
@@ -251,14 +251,14 @@ const Landing = () => {
         <div className="container mx-auto text-center">
           <h3 className="text-4xl font-bold mb-6">Ready to Transform Your Warehouse?</h3>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Start your free trial today and experience the future of warehouse management.
+            Experience the future of warehouse management with our interactive demo.
           </p>
           <Button 
             size="lg"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/dashboard')}
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
           >
-            Get Started Free
+            Try Demo Now
           </Button>
         </div>
       </section>
