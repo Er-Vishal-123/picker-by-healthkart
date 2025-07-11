@@ -10,6 +10,7 @@ import { Package, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { cleanupAuthState } from '@/utils/authCleanup';
 
 const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -35,15 +36,25 @@ const AuthForm = () => {
     setLoading(true);
 
     try {
+      // Clean up existing state before auth operations
+      cleanupAuthState();
+      
       if (isSignUp) {
         await signUp(email, password, {
           full_name: fullName,
           employee_id: employeeId,
           role: role
         });
+        // After successful signup, redirect to sign in
+        setIsSignUp(false);
+        setEmail('');
+        setPassword('');
+        setFullName('');
+        setEmployeeId('');
       } else {
         await signIn(email, password);
-        navigate('/dashboard');
+        // Force page reload for clean state
+        window.location.href = '/dashboard';
       }
     } catch (error) {
       console.error('Auth error:', error);
@@ -129,8 +140,7 @@ const AuthForm = () => {
                       type="text"
                       value={employeeId}
                       onChange={(e) => setEmployeeId(e.target.value)}
-                      required
-                      placeholder="Enter your employee ID"
+                      placeholder="Enter your employee ID (optional)"
                     />
                   </div>
                   <div className="space-y-2">
