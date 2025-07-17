@@ -73,13 +73,13 @@ const AuthForm = () => {
         <Button
           variant="ghost"
           onClick={() => navigate('/')}
-          className="mb-6 text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm"
+          className="mb-6 text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm border border-white/20 shadow-lg"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Button>
 
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-lg">
           <CardHeader className="text-center pb-4">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
@@ -89,7 +89,7 @@ const AuthForm = () => {
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Picker by HealthKart
             </CardTitle>
-            <p className="text-gray-600">Warehouse Management System</p>
+            <p className="text-gray-600">Health & Wellness Warehouse Management</p>
           </CardHeader>
           <CardContent>
             <Tabs value={isSignUp ? 'signup' : 'signin'} onValueChange={(value) => setIsSignUp(value === 'signup')}>
@@ -185,7 +185,7 @@ const AuthForm = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl"
                   disabled={loading}
                 >
                   {loading ? 'Loading...' : (isSignUp ? 'Create Account' : 'Sign In')}

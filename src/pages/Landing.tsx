@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AnimatedBackground from '@/components/ui/animated-background';
@@ -78,7 +77,7 @@ const Landing = () => {
       <AnimatedBackground />
       
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
+      <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
@@ -90,7 +89,7 @@ const Landing = () => {
           </div>
           <Button 
             onClick={() => navigate('/auth')}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm shadow-xl border border-white/20"
           >
             Get Started
           </Button>
@@ -101,15 +100,16 @@ const Landing = () => {
       <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto text-center">
           <div className="mb-8">
-            <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">
-              Transform Your Warehouse
+            <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-2xl">
+              Transform Your Health &
               <span className="block bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                Operations Today
+                Wellness Warehouse
               </span>
             </h2>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
-              Streamline your warehouse management with our comprehensive solution featuring 
-              barcode scanning, real-time analytics, and intelligent workflow automation.
+            <p className="text-xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow-lg">
+              Streamline your health product warehouse with our comprehensive solution featuring 
+              barcode scanning, real-time analytics, and intelligent workflow automation for medicines, 
+              supplements, fitness equipment, and personal care items.
             </p>
           </div>
           
@@ -117,14 +117,14 @@ const Landing = () => {
             <Button 
               size="lg"
               onClick={() => navigate('/auth')}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 backdrop-blur-sm shadow-2xl"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 backdrop-blur-sm shadow-2xl border border-white/20"
             >
               Start Free Trial
             </Button>
             <Button 
               size="lg"
               variant="outline"
-              className="text-lg px-8 py-4 border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+              className="text-lg px-8 py-4 border-2 border-white/40 text-white hover:bg-white/20 backdrop-blur-sm shadow-xl"
             >
               Watch Demo
             </Button>
@@ -133,9 +133,9 @@ const Landing = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center backdrop-blur-sm bg-white/10 rounded-lg p-6 border border-white/20">
+              <div key={index} className="text-center backdrop-blur-sm bg-black/30 rounded-lg p-6 border border-white/20 shadow-xl">
                 <div className="text-3xl font-bold text-white mb-2">{stat.number}</div>
-                <div className="text-white/80">{stat.label}</div>
+                <div className="text-white/90">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -143,7 +143,7 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 bg-black/20 backdrop-blur-sm relative z-10">
+      <section className="py-20 px-6 bg-black/30 backdrop-blur-sm relative z-10">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
@@ -176,7 +176,7 @@ const Landing = () => {
       <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20">
+            <div className="backdrop-blur-sm bg-black/40 rounded-2xl p-8 border border-white/20 shadow-2xl">
               <h3 className="text-4xl font-bold text-white mb-6 drop-shadow-lg">
                 Why Choose Our Platform?
               </h3>
@@ -187,7 +187,7 @@ const Landing = () => {
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold mb-2 text-white">Reduce Processing Time</h4>
-                    <p className="text-white/80">Cut order processing time by up to 50% with automated workflows and smart routing.</p>
+                    <p className="text-white/90">Cut order processing time by up to 50% with automated workflows and smart routing.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -196,7 +196,7 @@ const Landing = () => {
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold mb-2 text-white">Enhanced Security</h4>
-                    <p className="text-white/80">Role-based access control ensures secure operations across all user levels.</p>
+                    <p className="text-white/90">Role-based access control ensures secure operations across all user levels.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -205,20 +205,20 @@ const Landing = () => {
                   </div>
                   <div>
                     <h4 className="text-xl font-semibold mb-2 text-white">Boost Productivity</h4>
-                    <p className="text-white/80">Real-time analytics and predictive insights help optimize your operations.</p>
+                    <p className="text-white/90">Real-time analytics and predictive insights help optimize your operations.</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-8 backdrop-blur-sm border border-white/20">
+            <div className="bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl p-8 backdrop-blur-sm border border-white/20 shadow-2xl">
               <div className="text-center">
                 <Warehouse className="h-32 w-32 mx-auto text-white mb-6 drop-shadow-lg" />
                 <h4 className="text-2xl font-bold text-white mb-4">Ready to Get Started?</h4>
-                <p className="text-white/80 mb-6">Join hundreds of warehouses already using our platform</p>
+                <p className="text-white/90 mb-6">Join hundreds of health & wellness warehouses already using our platform</p>
                 <Button 
                   size="lg"
                   onClick={() => navigate('/auth')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl border border-white/20"
                 >
                   Start Your Journey
                 </Button>
@@ -229,7 +229,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonial Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-600/30 to-purple-600/30 backdrop-blur-sm relative z-10">
+      <section className="py-20 px-6 bg-gradient-to-r from-blue-600/40 to-purple-600/40 backdrop-blur-sm relative z-10">
         <div className="container mx-auto text-center text-white">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center mb-6">
@@ -250,16 +250,16 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-black/40 backdrop-blur-sm text-white relative z-10">
+      <section className="py-20 px-6 bg-black/50 backdrop-blur-sm text-white relative z-10">
         <div className="container mx-auto text-center">
-          <h3 className="text-4xl font-bold mb-6 drop-shadow-lg">Ready to Transform Your Warehouse?</h3>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
-            Start your free trial today and experience the future of warehouse management.
+          <h3 className="text-4xl font-bold mb-6 drop-shadow-lg">Ready to Transform Your Health Warehouse?</h3>
+          <p className="text-xl text-white/95 mb-8 max-w-2xl mx-auto drop-shadow-md">
+            Start your free trial today and experience the future of health & wellness warehouse management.
           </p>
           <Button 
             size="lg"
             onClick={() => navigate('/auth')}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-2xl"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-2xl border border-white/20"
           >
             Get Started Free
           </Button>
@@ -267,7 +267,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black/60 backdrop-blur-sm text-white py-12 px-6 relative z-10">
+      <footer className="bg-black/70 backdrop-blur-sm text-white py-12 px-6 relative z-10">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
