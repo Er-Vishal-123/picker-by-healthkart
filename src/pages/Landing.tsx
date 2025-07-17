@@ -65,9 +65,7 @@ const Landing = () => {
               Picker by HealthKart
             </h1>
           </div>
-          <Button onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm">
-            Get Started
-          </Button>
+          <Button onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm text-lg">Cool, Let's Login</Button>
         </div>
       </header>
 
