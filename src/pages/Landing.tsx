@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AnimatedBackground from '@/components/ui/animated-background';
+import HealthKartLogo from '@/components/ui/healthkart-logo';
 import { Package, Warehouse, Users, BarChart3, MessageSquare, QrCode, AlertTriangle, CheckSquare, Layers, FileText, Shield, Clock, TrendingUp, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
 const Landing = () => {
   const navigate = useNavigate();
   const features = [{
@@ -38,6 +40,7 @@ const Landing = () => {
     title: "Damage Reporting",
     description: "Easy reporting and tracking of damaged inventory items"
   }];
+  
   const stats = [{
     number: "99.9%",
     label: "Accuracy Rate"
@@ -51,6 +54,7 @@ const Landing = () => {
     number: "500+",
     label: "Items/Hour"
   }];
+
   return <div className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
       
@@ -59,7 +63,7 @@ const Landing = () => {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
-              <Package className="h-8 w-8 text-white" />
+              <HealthKartLogo className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
               Picker by HealthKart
@@ -220,7 +224,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <Package className="h-8 w-8 text-blue-400" />
+                <HealthKartLogo className="h-8 w-8 text-blue-400" />
                 <h5 className="text-xl font-bold">Picker by HealthKart</h5>
               </div>
               <p className="text-gray-400">

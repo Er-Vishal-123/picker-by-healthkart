@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import HealthKartLogo from '@/components/ui/healthkart-logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -83,7 +83,7 @@ const AuthForm = () => {
           <CardHeader className="text-center pb-4">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
-                <Package className="h-8 w-8 text-white" />
+                <HealthKartLogo className="h-8 w-8 text-white" />
               </div>
             </div>
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
