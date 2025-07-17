@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import AnimatedBackground from '@/components/ui/animated-background';
 import { 
   Package, 
   Warehouse, 
@@ -73,21 +74,23 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen relative overflow-hidden">
+      <AnimatedBackground />
+      
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
               <Package className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
               Picker by HealthKart
             </h1>
           </div>
           <Button 
             onClick={() => navigate('/auth')}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm"
           >
             Get Started
           </Button>
@@ -95,16 +98,16 @@ const Landing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto text-center">
           <div className="mb-8">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">
               Transform Your Warehouse
-              <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
                 Operations Today
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
               Streamline your warehouse management with our comprehensive solution featuring 
               barcode scanning, real-time analytics, and intelligent workflow automation.
             </p>
@@ -114,14 +117,14 @@ const Landing = () => {
             <Button 
               size="lg"
               onClick={() => navigate('/auth')}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 backdrop-blur-sm shadow-2xl"
             >
               Start Free Trial
             </Button>
             <Button 
               size="lg"
               variant="outline"
-              className="text-lg px-8 py-4 border-2"
+              className="text-lg px-8 py-4 border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
             >
               Watch Demo
             </Button>
@@ -130,9 +133,9 @@ const Landing = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
+              <div key={index} className="text-center backdrop-blur-sm bg-white/10 rounded-lg p-6 border border-white/20">
+                <div className="text-3xl font-bold text-white mb-2">{stat.number}</div>
+                <div className="text-white/80">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -140,20 +143,20 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 bg-white/50">
+      <section className="py-20 px-6 bg-black/20 backdrop-blur-sm relative z-10">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Powerful Features for Modern Warehouses
             </h3>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
               Everything you need to optimize your warehouse operations in one integrated platform
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <Card key={index} className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 bg-white/95 backdrop-blur-sm hover:scale-105">
                 <CardHeader className="text-center pb-4">
                   <div className="mx-auto mb-4 p-3 bg-gray-50 rounded-xl w-fit">
                     {feature.icon}
@@ -170,52 +173,52 @@ const Landing = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h3 className="text-4xl font-bold text-gray-900 mb-6">
+            <div className="backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20">
+              <h3 className="text-4xl font-bold text-white mb-6 drop-shadow-lg">
                 Why Choose Our Platform?
               </h3>
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Clock className="h-6 w-6 text-green-600" />
+                  <div className="p-2 bg-green-500/20 rounded-lg backdrop-blur-sm">
+                    <Clock className="h-6 w-6 text-green-300" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-semibold mb-2">Reduce Processing Time</h4>
-                    <p className="text-gray-600">Cut order processing time by up to 50% with automated workflows and smart routing.</p>
+                    <h4 className="text-xl font-semibold mb-2 text-white">Reduce Processing Time</h4>
+                    <p className="text-white/80">Cut order processing time by up to 50% with automated workflows and smart routing.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Shield className="h-6 w-6 text-blue-600" />
+                  <div className="p-2 bg-blue-500/20 rounded-lg backdrop-blur-sm">
+                    <Shield className="h-6 w-6 text-blue-300" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-semibold mb-2">Enhanced Security</h4>
-                    <p className="text-gray-600">Role-based access control ensures secure operations across all user levels.</p>
+                    <h4 className="text-xl font-semibold mb-2 text-white">Enhanced Security</h4>
+                    <p className="text-white/80">Role-based access control ensures secure operations across all user levels.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <TrendingUp className="h-6 w-6 text-purple-600" />
+                  <div className="p-2 bg-purple-500/20 rounded-lg backdrop-blur-sm">
+                    <TrendingUp className="h-6 w-6 text-purple-300" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-semibold mb-2">Boost Productivity</h4>
-                    <p className="text-gray-600">Real-time analytics and predictive insights help optimize your operations.</p>
+                    <h4 className="text-xl font-semibold mb-2 text-white">Boost Productivity</h4>
+                    <p className="text-white/80">Real-time analytics and predictive insights help optimize your operations.</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl p-8">
+            <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-8 backdrop-blur-sm border border-white/20">
               <div className="text-center">
-                <Warehouse className="h-32 w-32 mx-auto text-blue-600 mb-6" />
-                <h4 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h4>
-                <p className="text-gray-600 mb-6">Join hundreds of warehouses already using our platform</p>
+                <Warehouse className="h-32 w-32 mx-auto text-white mb-6 drop-shadow-lg" />
+                <h4 className="text-2xl font-bold text-white mb-4">Ready to Get Started?</h4>
+                <p className="text-white/80 mb-6">Join hundreds of warehouses already using our platform</p>
                 <Button 
                   size="lg"
                   onClick={() => navigate('/auth')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl"
                 >
                   Start Your Journey
                 </Button>
@@ -226,7 +229,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonial Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-600 to-purple-600">
+      <section className="py-20 px-6 bg-gradient-to-r from-blue-600/30 to-purple-600/30 backdrop-blur-sm relative z-10">
         <div className="container mx-auto text-center text-white">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center mb-6">
@@ -234,7 +237,7 @@ const Landing = () => {
                 <Star key={i} className="h-8 w-8 fill-current text-yellow-400" />
               ))}
             </div>
-            <blockquote className="text-2xl font-light mb-8 italic">
+            <blockquote className="text-2xl font-light mb-8 italic drop-shadow-md">
               "This platform has revolutionized our warehouse operations. We've seen a 50% improvement 
               in efficiency and our error rates have dropped to nearly zero."
             </blockquote>
@@ -247,16 +250,16 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gray-900 text-white">
+      <section className="py-20 px-6 bg-black/40 backdrop-blur-sm text-white relative z-10">
         <div className="container mx-auto text-center">
-          <h3 className="text-4xl font-bold mb-6">Ready to Transform Your Warehouse?</h3>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <h3 className="text-4xl font-bold mb-6 drop-shadow-lg">Ready to Transform Your Warehouse?</h3>
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
             Start your free trial today and experience the future of warehouse management.
           </p>
           <Button 
             size="lg"
             onClick={() => navigate('/auth')}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-2xl"
           >
             Get Started Free
           </Button>
@@ -264,7 +267,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12 px-6">
+      <footer className="bg-black/60 backdrop-blur-sm text-white py-12 px-6 relative z-10">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>

@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { cleanupAuthState } from '@/utils/authCleanup';
+import AnimatedBackground from '@/components/ui/animated-background';
 
 const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -64,19 +65,21 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
+      <AnimatedBackground />
+      
+      <div className="w-full max-w-md relative z-10">
         {/* Back to Landing Button */}
         <Button
           variant="ghost"
           onClick={() => navigate('/')}
-          className="mb-6 text-gray-600 hover:text-gray-900"
+          className="mb-6 text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Button>
 
-        <Card className="shadow-2xl border-0">
+        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center pb-4">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
