@@ -69,7 +69,7 @@ const Landing = () => {
               Picker by HealthKart
             </h1>
           </div>
-          <Button onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm text-lg">Cool, Let's Login</Button>
+          <Button onClick={() => navigate('/dashboard')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 backdrop-blur-sm text-lg">Cool, Let's Login</Button>
         </div>
       </header>
 
@@ -90,7 +90,7 @@ const Landing = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 backdrop-blur-sm shadow-2xl">
+            <Button size="lg" onClick={() => navigate('/dashboard')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 backdrop-blur-sm shadow-2xl">
               Start Free Trial
             </Button>
             
@@ -177,7 +177,7 @@ const Landing = () => {
                 <Warehouse className="h-32 w-32 mx-auto text-white mb-6 drop-shadow-lg" />
                 <h4 className="text-2xl font-bold text-white mb-4">Ready to Get Started?</h4>
                 <p className="text-white/80 mb-6">Join hundreds of warehouses already using our platform</p>
-                <Button size="lg" onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl">
+                <Button size="lg" onClick={() => navigate('/dashboard')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl">
                   Start Your Journey
                 </Button>
               </div>
@@ -212,7 +212,7 @@ const Landing = () => {
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
             Start your free trial today and experience the future of warehouse management.
           </p>
-          <Button size="lg" onClick={() => navigate('/auth')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-2xl">
+          <Button size="lg" onClick={() => navigate('/dashboard')} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 shadow-2xl">
             Get Started Free
           </Button>
         </div>
