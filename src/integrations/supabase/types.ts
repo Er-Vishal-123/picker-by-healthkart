@@ -7,10 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
@@ -206,7 +206,7 @@ export type Database = {
       }
       performance_metrics: {
         Row: {
-          average_pick_time: unknown | null
+          average_pick_time: unknown
           created_at: string | null
           date: string
           efficiency_score: number | null
@@ -218,7 +218,7 @@ export type Database = {
           warehouse_id: string
         }
         Insert: {
-          average_pick_time?: unknown | null
+          average_pick_time?: unknown
           created_at?: string | null
           date: string
           efficiency_score?: number | null
@@ -230,7 +230,7 @@ export type Database = {
           warehouse_id: string
         }
         Update: {
-          average_pick_time?: unknown | null
+          average_pick_time?: unknown
           created_at?: string | null
           date?: string
           efficiency_score?: number | null
